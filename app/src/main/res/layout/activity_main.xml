@@ -99,7 +99,6 @@
         android:layout_marginStart="16dp"
         app:layout_constraintTop_toBottomOf="@id/tv_bateria"
         app:layout_constraintStart_toEndOf="@id/tv_potencia"
-
         android:text="320cv" />
 
     <TextView
@@ -118,6 +117,56 @@
         app:layout_constraintStart_toEndOf="@id/tv_recarga"
         android:layout_marginStart="16dp"
         android:text="23 min" />
+
+    <EditText
+        android:id="@+id/et_preco_kWh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:ems="10"
+        android:hint="@string/pre_o_por_kwh"
+        android:inputType="numberDecimal"
+        android:maxLength="10"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_recarga_value"
+        tools:ignore="Autofill" />
+
+    <EditText
+        android:id="@+id/et_km_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="@string/km_percorrido"
+        android:inputType="numberDecimal"
+        android:maxLength="10"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_preco_kWh"
+        tools:ignore="Autofill" />
+
+    <Button
+        android:id="@+id/btn_cacular"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/calcular"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/et_km_value"
+        app:layout_constraintStart_toStartOf="@id/et_km_value"
+        app:layout_constraintEnd_toEndOf="@id/et_km_value"
+        />
+
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/btn_cacular"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="25dp"
+        />
 
 
 
