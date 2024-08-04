@@ -1,15 +1,12 @@
-package com.example.eletriccarapp
+package com.example.eletriccarapp.presentation
 
-import android.content.ContentValues.TAG
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.example.eletriccarapp.R
 
 class MainActivity : AppCompatActivity() {
     lateinit var preco: EditText
@@ -34,10 +31,12 @@ class MainActivity : AppCompatActivity() {
 
     fun setupListeners() {
         bntCalcular.setOnClickListener {
-           calcular()
+           //calcular()
+            startActivity(Intent(this,CalcularAutonomiaActivity::class.java))
         }
 
     }
+
 
     fun calcular() {
         val preco= preco.text.toString().toFloat()
