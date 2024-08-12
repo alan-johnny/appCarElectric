@@ -8,12 +8,15 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.eletriccarapp.R
+import com.example.eletriccarapp.presentation.adapter.CarAdapter
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var bntCalcular: Button
-    lateinit var lista : ListView
+    lateinit var lista : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,12 +29,12 @@ class MainActivity : AppCompatActivity() {
     fun setupViews() {
 
         bntCalcular = findViewById(R.id.btn_cacular)
-        lista = findViewById(R.id.lv_informacoes)
+        lista = findViewById(R.id.rv_list_car)
 
     }
     fun setupList() {
         val dados = arrayOf("watter","sugar", "coffee", "milk")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, dados)
+        val adapter = CarAdapter(dados)
         lista.adapter = adapter
     }
 
