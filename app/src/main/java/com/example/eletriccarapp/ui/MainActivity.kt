@@ -1,17 +1,13 @@
-package com.example.eletriccarapp.presentation
+package com.example.eletriccarapp.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.EditText
-import android.widget.ListView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.eletriccarapp.R
-import com.example.eletriccarapp.presentation.adapter.CarAdapter
+import com.example.eletriccarapp.data.CarFactory
+import com.example.eletriccarapp.ui.adapter.CarAdapter
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,8 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     }
     fun setupList() {
-        val dados = arrayOf("watter","sugar", "coffee", "milk")
-        val adapter = CarAdapter(dados)
+        val adapter = CarAdapter(CarFactory.list)
         lista.adapter = adapter
     }
 
