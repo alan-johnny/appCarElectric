@@ -1,5 +1,6 @@
 package com.example.eletriccarapp.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.eletriccarapp.R
@@ -26,6 +28,9 @@ class CarFragment: Fragment() {
 
 
     lateinit var lista : RecyclerView
+    lateinit var progressBar : ProgressBar
+
+
     var carrosArray : ArrayList<Carro> = ArrayList()
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,29 +41,33 @@ class CarFragment: Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        callService()
-        setupView(view)
 
+        setupView(view)
+        callService()
     }
 
     fun setupView(view: View) {
 
         lista = view.findViewById(R.id.rv_list_car)
+        progressBar = view.findViewById(R.id.pb_loader)
     }
     fun setupList() {
         val adapter = CarAdapter(carrosArray)
         lista.adapter = adapter
+        lista.visibility = View.VISIBLE
     }
     fun callService(){
         val urlBase = "https://igorbag.github.io/cars-api/cars.json"
         MyTask().execute(urlBase)
+
     }
 
     inner class MyTask: AsyncTask<String, String, String>() {
         override fun onPreExecute() {
             super.onPreExecute()
-
+            progressBar.visibility = View.VISIBLE
         }
+        @SuppressLint("SuspiciousIndentation")
         override fun doInBackground(vararg urls: String?): String {
           var urlConnection : HttpURLConnection? = null
             try {
@@ -118,6 +127,7 @@ class CarFragment: Fragment() {
                     carrosArray.add(model)
                 }
                 setupList()
+               progressBar.visibility = View.GONE
 
             }catch(ex : Exception) {
                 Log.e("Erro", "Erro ao processar dados")
