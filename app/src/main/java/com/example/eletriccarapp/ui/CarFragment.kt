@@ -20,11 +20,14 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.eletriccarapp.R
 import com.example.eletriccarapp.data.CarFactory
+import com.example.eletriccarapp.data.CarsApi
 import com.example.eletriccarapp.domain.Carro
 import com.example.eletriccarapp.ui.adapter.CarAdapter
 import org.json.JSONArray
 import org.json.JSONObject
 import org.json.JSONTokener
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -38,6 +41,7 @@ class CarFragment: Fragment() {
     lateinit var progressBar : ProgressBar
     lateinit var noInternetImg : ImageView
     lateinit var noInternetText : TextView
+    lateinit var carApi : CarsApi
 
 
     var carrosArray : ArrayList<Carro> = ArrayList()
@@ -50,6 +54,7 @@ class CarFragment: Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupRetrofit()
         setupView(view)
 
     }
@@ -57,11 +62,40 @@ class CarFragment: Fragment() {
     override fun onResume() {
         super.onResume()
         if (checkForInternet(context)){
-            callService()
+           // callService() outra forma de chamar service
+            getAllCars()
         }else{
             emptyState()
         }
 
+    }
+
+    fun setupRetrofit() {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://igorbag.github.io/cars-api/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        carApi = retrofit.create(CarsApi::class.java)
+    }
+
+    fun getAllCars(){
+        carApi.getAllCars().enqueue(object : retrofit2.Callback<List<Carro>> {
+            override fun onResponse(call: retrofit2.Call<List<Carro>>, response: retrofit2.Response<List<Carro>>) {
+                if (response.isSuccessful) {
+                    carrosArray.clear()
+                    carrosArray.addAll(response.body()!!)
+                    setupList()
+                    progressBar.isVisible = false
+                    noInternetImg.isVisible = false
+                    noInternetText.isVisible = false
+                }
+            }
+
+            override fun onFailure(call: retrofit2.Call<List<Carro>>, t: Throwable) {
+                t.message?.let { Log.e("API ERROR", it) }
+                progressBar.isVisible = false
+            }
+        })
     }
 
     fun emptyState() {
@@ -112,6 +146,8 @@ fun checkForInternet( context: Context?) : Boolean {
 
     }
 
+
+    // usado para aprendizado
     inner class MyTask: AsyncTask<String, String, String>() {
         override fun onPreExecute() {
             super.onPreExecute()
