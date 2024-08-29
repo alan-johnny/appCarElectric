@@ -1,14 +1,21 @@
 package com.example.eletriccarapp.ui
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.eletriccarapp.R
@@ -29,6 +36,8 @@ class CarFragment: Fragment() {
 
     lateinit var lista : RecyclerView
     lateinit var progressBar : ProgressBar
+    lateinit var noInternetImg : ImageView
+    lateinit var noInternetText : TextView
 
 
     var carrosArray : ArrayList<Carro> = ArrayList()
@@ -41,31 +50,72 @@ class CarFragment: Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupView(view)
-        callService()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (checkForInternet(context)){
+            callService()
+        }else{
+            emptyState()
+        }
+
+    }
+
+    fun emptyState() {
+        progressBar.isVisible = false
+        lista.isVisible = false
+        noInternetImg.isVisible = true
+        noInternetText.isVisible= true
     }
 
     fun setupView(view: View) {
 
         lista = view.findViewById(R.id.rv_list_car)
         progressBar = view.findViewById(R.id.pb_loader)
+        noInternetImg = view.findViewById(R.id.iv_empty_state)
+        noInternetText = view.findViewById(R.id.tv_no_wifi)
     }
+
     fun setupList() {
         val adapter = CarAdapter(carrosArray)
         lista.adapter = adapter
-        lista.visibility = View.VISIBLE
+        lista.isVisible = true
     }
+
     fun callService(){
         val urlBase = "https://igorbag.github.io/cars-api/cars.json"
         MyTask().execute(urlBase)
 
     }
 
+fun checkForInternet( context: Context?) : Boolean {
+        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            val network = connectivityManager.activeNetwork ?: return false
+
+            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+            return when {
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                else -> false
+            }
+        }else{
+            @Suppress("DEPRECATION")
+            val networkInfo = connectivityManager.activeNetworkInfo?:return false
+            @Suppress("DEPRECATION")
+            return networkInfo.isConnected
+        }
+
+    }
+
     inner class MyTask: AsyncTask<String, String, String>() {
         override fun onPreExecute() {
             super.onPreExecute()
-            progressBar.visibility = View.VISIBLE
+            progressBar.isVisible = true
         }
         @SuppressLint("SuspiciousIndentation")
         override fun doInBackground(vararg urls: String?): String {
@@ -126,8 +176,10 @@ class CarFragment: Fragment() {
                     )
                     carrosArray.add(model)
                 }
+                progressBar.isVisible = false
+                noInternetImg.isVisible = false
+                noInternetText.isVisible = false
                 setupList()
-               progressBar.visibility = View.GONE
 
             }catch(ex : Exception) {
                 Log.e("Erro", "Erro ao processar dados")
