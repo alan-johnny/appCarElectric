@@ -21,6 +21,12 @@ class CalcularAutonomiaActivity : AppCompatActivity() {
         setContentView(R.layout.activity_calcular_autonomia)
         setupViews()
         setupListeners()
+        setupCache()
+    }
+
+    private fun setupCache() {
+        val valorCache = getSharedPref()
+        resultado.text = valorCache.toString()
     }
 
     fun setupViews() {
@@ -49,5 +55,19 @@ class CalcularAutonomiaActivity : AppCompatActivity() {
         val km = kmPercorridos.text.toString().toFloat()
         val result =  preco / km
         resultado.text = result.toString()
+        saveSharedPref(result)
+    }
+
+    fun saveSharedPref(resultado: Float){
+        val sharedPref = getPreferences(MODE_PRIVATE)?: return
+        with(sharedPref.edit()) {
+            putFloat(getString(R.string.save_calc),resultado)
+          apply()
+        }
+    }
+
+    fun getSharedPref(): Float {
+        val sharedPref = getPreferences(MODE_PRIVATE)
+        return sharedPref.getFloat(getString(R.string.save_calc), 0.0F)
     }
 }
