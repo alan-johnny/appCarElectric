@@ -114,9 +114,16 @@ class CarFragment: Fragment() {
     }
 
     fun setupList() {
-        val adapter = CarAdapter(carrosArray)
-        lista.adapter = adapter
-        lista.isVisible = true
+        val carAdapter = CarAdapter(carrosArray)
+        lista.apply {
+            adapter = carAdapter
+            isVisible = true
+        }
+
+
+        carAdapter.carItemLister = {carro ->
+            val bateria = carro.bateria
+        }
     }
 
     fun callService(){
@@ -208,7 +215,8 @@ fun checkForInternet( context: Context?) : Boolean {
                         bateria = bateria,
                         potencia = potencia,
                         recarga = recarga,
-                        urlPhoto = urlPhoto
+                        urlPhoto = urlPhoto,
+                        isFavorite = false
                     )
                     carrosArray.add(model)
                 }

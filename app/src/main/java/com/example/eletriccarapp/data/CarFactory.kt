@@ -10,7 +10,8 @@ object CarFactory {
             bateria = "300 KwH",
             potencia = "350w",
             recarga = "24 min",
-            urlPhoto = "https://example.com/image1.jpg"
+            urlPhoto = "https://example.com/image1.jpg",
+            isFavorite = false
             ),
 
         Carro(
@@ -19,7 +20,8 @@ object CarFactory {
             bateria = "200 KwH",
             potencia = "150w",
             recarga = "34 min",
-            urlPhoto = "https://example.com/image1.jpg"
+            urlPhoto = "https://example.com/image1.jpg",
+            isFavorite = false
         ),
 
         Carro(
@@ -28,7 +30,8 @@ object CarFactory {
             bateria = "150 KwH",
             potencia = "200w",
             recarga = "48 min",
-            urlPhoto = "https://example.com/image1.jpg"
+            urlPhoto = "https://example.com/image1.jpg",
+            isFavorite = false
         ),
         Carro(
             id = 4,
@@ -36,7 +39,8 @@ object CarFactory {
             bateria = "200 KwH",
             potencia = "150w",
             recarga = "34 min",
-            urlPhoto = "https://example.com/image1.jpg"
+            urlPhoto = "https://example.com/image1.jpg",
+            isFavorite = false
         ),
         Carro(
             id = 5,
@@ -44,7 +48,8 @@ object CarFactory {
             bateria = "200 KwH",
             potencia = "150w",
             recarga = "34 min",
-            urlPhoto = "https://example.com/image1.jpg"
+            urlPhoto = "https://example.com/image1.jpg",
+            isFavorite = false
         )
     )
 }
