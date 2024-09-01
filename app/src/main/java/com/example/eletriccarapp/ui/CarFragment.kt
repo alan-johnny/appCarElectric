@@ -2,7 +2,6 @@ package com.example.eletriccarapp.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.AsyncTask
@@ -15,22 +14,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.eletriccarapp.R
-import com.example.eletriccarapp.data.CarFactory
 import com.example.eletriccarapp.data.CarsApi
+import com.example.eletriccarapp.data.local.CarRepository
 import com.example.eletriccarapp.domain.Carro
 import com.example.eletriccarapp.ui.adapter.CarAdapter
 import org.json.JSONArray
-import org.json.JSONObject
 import org.json.JSONTokener
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.BufferedReader
-import java.io.InputStream
-import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -82,17 +78,20 @@ class CarFragment: Fragment() {
         carApi.getAllCars().enqueue(object : retrofit2.Callback<List<Carro>> {
             override fun onResponse(call: retrofit2.Call<List<Carro>>, response: retrofit2.Response<List<Carro>>) {
                 if (response.isSuccessful) {
-                    carrosArray.clear()
-                    carrosArray.addAll(response.body()!!)
-                    setupList()
+
                     progressBar.isVisible = false
                     noInternetImg.isVisible = false
                     noInternetText.isVisible = false
+                    response.body()?.let {
+                        setupList(it)
+                    }
+                }else{
+                    Toast.makeText(context,R.string.error,Toast.LENGTH_LONG).show()
                 }
             }
 
             override fun onFailure(call: retrofit2.Call<List<Carro>>, t: Throwable) {
-                t.message?.let { Log.e("API ERROR", it) }
+                Toast.makeText(context,R.string.error,Toast.LENGTH_LONG).show()
                 progressBar.isVisible = false
             }
         })
@@ -113,8 +112,8 @@ class CarFragment: Fragment() {
         noInternetText = view.findViewById(R.id.tv_no_wifi)
     }
 
-    fun setupList() {
-        val carAdapter = CarAdapter(carrosArray)
+    fun setupList(list: List<Carro>) {
+        val carAdapter = CarAdapter(list)
         lista.apply {
             adapter = carAdapter
             isVisible = true
@@ -122,7 +121,7 @@ class CarFragment: Fragment() {
 
 
         carAdapter.carItemLister = {carro ->
-            val bateria = carro.bateria
+          val isSaved =  CarRepository(requireContext()).save(carro)
         }
     }
 
@@ -223,13 +222,12 @@ fun checkForInternet( context: Context?) : Boolean {
                 progressBar.isVisible = false
                 noInternetImg.isVisible = false
                 noInternetText.isVisible = false
-                setupList()
+                //setupList()
 
             }catch(ex : Exception) {
                 Log.e("Erro", "Erro ao processar dados")
             }
         }
-
-
     }
+
 }
