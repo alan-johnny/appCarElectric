@@ -6,6 +6,7 @@ object CarsContract {
 
     object CarEntry : BaseColumns{
         const val TABLE_NAME = "car"
+        const val COLUMN_CAR_ID= "car_id"
         const val COLUMN_PRECO = "preco"
         const val COLUMN_BATERIA = "bateria"
         const val COLUMN_POTENCIA = "potencia"
@@ -14,11 +15,12 @@ object CarsContract {
 
     }
     const val TABLE_CAR = "CREATE TABLE ${CarEntry.TABLE_NAME} (" +
-            "${BaseColumns._ID} INTEGER PRIMARY KEY " +
-            "${CarEntry.COLUMN_PRECO} TEXT," +
-            "${CarEntry.COLUMN_BATERIA} TEXT," +
-            "${CarEntry.COLUMN_POTENCIA} TEXT," +
-            "${CarEntry.COLUMN_RECARGA} TEXT," +
+            "${BaseColumns._ID} INTEGER PRIMARY KEY, " +
+            "${CarEntry.COLUMN_CAR_ID} TEXT, " +
+            "${CarEntry.COLUMN_PRECO} TEXT, " +
+            "${CarEntry.COLUMN_BATERIA} TEXT, " +
+            "${CarEntry.COLUMN_POTENCIA} TEXT, " +
+            "${CarEntry.COLUMN_RECARGA} TEXT, " +
             "${CarEntry.COLUMN_URL_PHOTO} TEXT)"
 
     const val SQL_DELETE_ENTRIES =

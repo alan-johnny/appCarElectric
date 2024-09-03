@@ -9,3 +9,4 @@ data class Carro (
     val urlPhoto: String,
     var isFavorite: Boolean
 )
+
