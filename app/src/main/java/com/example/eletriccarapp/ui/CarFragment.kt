@@ -119,9 +119,8 @@ class CarFragment: Fragment() {
             isVisible = true
         }
 
-
         carAdapter.carItemLister = {carro ->
-          val isSaved =  CarRepository(requireContext()).findCarById(carro.id)
+          val isSaved =  CarRepository(requireContext()).saveIfNoExist(carro)
         }
     }
 

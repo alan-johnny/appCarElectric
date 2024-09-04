@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.eletriccarapp.R
 import com.example.eletriccarapp.domain.Carro
 
-class CarAdapter(private val carros: List<Carro>): RecyclerView.Adapter<CarAdapter.ViewHolder>() {
+class CarAdapter(private val carros: List<Carro>, private val isFavoriteScreen: Boolean = false): RecyclerView.Adapter<CarAdapter.ViewHolder>() {
 
     var carItemLister: (Carro) -> Unit = {}
 
@@ -22,6 +22,11 @@ class CarAdapter(private val carros: List<Carro>): RecyclerView.Adapter<CarAdapt
         holder.bateria.text = carros[position].bateria
         holder.potencia.text = carros[position].potencia
         holder.recarga.text = carros[position].recarga
+
+        if(isFavoriteScreen){
+            holder.favorito.setImageResource(R.drawable.ic_star_rate_24)
+        }
+
         holder.favorito.setOnClickListener {
             val carro = carros[position]
             carItemLister(carro)
