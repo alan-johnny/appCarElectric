@@ -162,6 +162,7 @@ class CarRepository(private val context: Context) {
 
 
 
+    @SuppressLint("SuspiciousIndentation")
     fun getAll(): List<Carro> {
         val dbHelper = CarsDbHelper(context)
         val db = dbHelper.readableDatabase
